@@ -1,101 +1,61 @@
-# [Telegram Desktop][telegram_desktop] – Official Messenger
+# Expressivegram
 
-This is the complete source code and the build instructions for the official [Telegram][telegram] messenger desktop client, based on the [Telegram API][telegram_api] and the [MTProto][telegram_proto] secure protocol.
+**Telegram Desktop, reimagined with Material 3 Expressive.**
 
-[![Version](https://badge.fury.io/gh/telegramdesktop%2Ftdesktop.svg)](https://github.com/telegramdesktop/tdesktop/releases)
-[![Build Status](https://github.com/telegramdesktop/tdesktop/workflows/Windows./badge.svg)](https://github.com/telegramdesktop/tdesktop/actions)
-[![Build Status](https://github.com/telegramdesktop/tdesktop/workflows/MacOS./badge.svg)](https://github.com/telegramdesktop/tdesktop/actions)
-[![Build Status](https://github.com/telegramdesktop/tdesktop/workflows/Linux./badge.svg)](https://github.com/telegramdesktop/tdesktop/actions)
-[![Built with Depot](https://img.shields.io/badge/Built%20with-Depot.dev-46A75A)](https://depot.dev)
+Expressivegram is an unofficial community fork of [Telegram Desktop](https://github.com/telegramdesktop/tdesktop) exploring a more expressive desktop messaging experience inspired by Google's [Material 3 design system](https://m3.material.io/).
 
-[![Preview of Telegram Desktop][preview_image]][preview_image_url]
+The goal is to bring expressive shapes, a coherent color system, clearer visual hierarchy, and carefully designed interaction states to Telegram Desktop while preserving its messaging functionality.
 
-The source code is published under GPLv3 with OpenSSL exception, the license is available [here][license].
+> [!NOTE]
+> Expressivegram is an unofficial third-party project. It is not affiliated with, endorsed by, or sponsored by Telegram or Google.
 
-## Supported systems
+[![Linux CI](https://github.com/timched/Expressivegram/actions/workflows/build-linux.yml/badge.svg?branch=dev)](https://github.com/timched/Expressivegram/actions/workflows/build-linux.yml)
+[![Upstream Telegram Desktop](https://img.shields.io/badge/based%20on-Telegram%20Desktop-26A5E4)](https://github.com/telegramdesktop/tdesktop)
+[![License](https://img.shields.io/badge/license-GPL--3.0%20with%20OpenSSL%20exception-blue)](LICENSE)
 
-The latest version is available for
+## Project status
 
-* [Windows 7 and above (64 bit)](https://telegram.org/dl/desktop/win64) ([portable](https://telegram.org/dl/desktop/win64_portable))
-* [Windows 7 and above (32 bit)](https://telegram.org/dl/desktop/win) ([portable](https://telegram.org/dl/desktop/win_portable))
-* [macOS 10.13 and above](https://telegram.org/dl/desktop/mac)
-* [Linux static build for 64 bit](https://telegram.org/dl/desktop/linux)
-* [Snap](https://snapcraft.io/telegram-desktop)
-* [Flatpak](https://flathub.org/apps/details/org.telegram.desktop)
+**Work in progress.** Expressivegram is based on the Telegram Desktop C++/Qt codebase. The Material 3 Expressive redesign is being developed incrementally; not every screen or component has been redesigned yet.
 
-## Old system versions
+## Design goals
 
-Version **4.9.9** was the last that supports older systems
+- **Material 3 Expressive** — intentional shape, color, typography, and motion rather than a simple recolor.
+- **Consistent components** — shared visual language for navigation, buttons, menus, dialogs, settings, and chat surfaces.
+- **Desktop-first usability** — expressive styling without sacrificing keyboard navigation, density, or familiar desktop behavior.
+- **Theme support** — coordinated light and dark palettes, with room for user customization.
+- **Preserve Telegram functionality** — keep messaging and platform features working as the interface evolves.
 
-* [macOS 10.12](https://updates.tdesktop.com/tmac/tsetup.4.9.9.dmg)
-* [Linux with glibc < 2.28 static build](https://updates.tdesktop.com/tlinux/tsetup.4.9.9.tar.xz)
+## Building
 
-Version **2.4.4** was the last that supports older systems
+The project uses the upstream Telegram Desktop build system and its Git submodules. Start with the [Linux build instructions](docs/building-linux.md), [Windows build instructions](docs/building-win.md), or [macOS build instructions](docs/building-mac.md).
 
-* [OS X 10.10 and 10.11](https://updates.tdesktop.com/tosx/tsetup-osx.2.4.4.dmg)
-* [Linux static build for 32 bit](https://updates.tdesktop.com/tlinux32/tsetup32.2.4.4.tar.xz)
+For a Linux build, the upstream build environment uses Docker and Poetry:
 
-Version **1.8.15** was the last that supports older systems
+```bash
+git clone --recursive https://github.com/timched/Expressivegram.git
+cd Expressivegram
+```bash
+# Prepare the upstream Linux build environment
+Telegram/build/prepare/linux.sh
+` ` `
+```
 
-* [Windows XP and Vista](https://updates.tdesktop.com/tsetup/tsetup.1.8.15.exe) ([portable](https://updates.tdesktop.com/tsetup/tportable.1.8.15.zip))
-* [OS X 10.8 and 10.9](https://updates.tdesktop.com/tmac/tsetup.1.8.15.dmg)
-* [OS X 10.6 and 10.7](https://updates.tdesktop.com/tmac32/tsetup32.1.8.15.dmg)
+Then build from the repository root using the Docker image created by the preparation script. Supply your own Telegram API credentials as described in [the upstream build guide](docs/building-linux.md).
 
-## Third-party
+## GitHub Actions
 
-* Qt 6 ([LGPL](http://doc.qt.io/qt-6/lgpl.html)) and Qt 5.15 ([LGPL](http://doc.qt.io/qt-5/lgpl.html)) slightly patched
-* OpenSSL 3.2.1 ([Apache License 2.0](https://openssl-library.org/source/license/apache-license-2.0.txt))
-* WebRTC ([New BSD License](https://github.com/desktop-app/tg_owt/blob/master/LICENSE))
-* zlib ([zlib License](http://www.zlib.net/zlib_license.html))
-* LZMA SDK 9.20 ([public domain](http://www.7-zip.org/sdk.html))
-* liblzma ([public domain](http://tukaani.org/xz/))
-* Google Breakpad ([License](https://chromium.googlesource.com/breakpad/breakpad/+/master/LICENSE))
-* Google Crashpad ([Apache License 2.0](https://chromium.googlesource.com/crashpad/crashpad/+/master/LICENSE))
-* GYP ([BSD License](https://github.com/bnoordhuis/gyp/blob/master/LICENSE))
-* Ninja ([Apache License 2.0](https://github.com/ninja-build/ninja/blob/master/COPYING))
-* OpenAL Soft ([LGPL](https://github.com/kcat/openal-soft/blob/master/COPYING))
-* Opus codec ([BSD License](http://www.opus-codec.org/license/))
-* FFmpeg ([LGPL](https://www.ffmpeg.org/legal.html))
-* Guideline Support Library ([MIT License](https://github.com/Microsoft/GSL/blob/master/LICENSE))
-* Range-v3 ([Boost License](https://github.com/ericniebler/range-v3/blob/master/LICENSE.txt))
-* Open Sans font ([Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html))
-* Vazirmatn font ([SIL Open Font License 1.1](https://github.com/rastikerdar/vazirmatn/blob/master/OFL.txt))
-* Emoji alpha codes ([MIT License](https://github.com/emojione/emojione/blob/master/extras/alpha-codes/LICENSE.md))
-* xxHash ([BSD License](https://github.com/Cyan4973/xxHash/blob/dev/LICENSE))
-* QR Code generator ([MIT License](https://github.com/nayuki/QR-Code-generator#license))
-* CMake ([New BSD License](https://github.com/Kitware/CMake/blob/master/Copyright.txt))
-* Hunspell ([LGPL](https://github.com/hunspell/hunspell/blob/master/COPYING.LESSER))
-* Ada ([Apache License 2.0](https://github.com/ada-url/ada/blob/main/LICENSE-APACHE))
-* zxcvbn-c ([MIT License](https://github.com/tsyrogit/zxcvbn-c/blob/master/LICENSE.txt))
-* FrequencyWords by Hermit Dave ([Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/))
+The Linux build workflow runs for pushes to `dev`, pull requests targeting `dev`, and manual dispatches. It checks out submodules, prepares the upstream build container, compiles the application, and uploads the resulting executable as a workflow artifact.
 
-## Build instructions
+The first full build can take a while because Telegram Desktop has many dependencies.
 
-* [Windows (32-bit and 64-bit)][win]
-* [macOS][mac]
-* [GNU/Linux using Docker][linux]
+## License
 
-[//]: # (LINKS)
-[telegram]: https://telegram.org
-[telegram_desktop]: https://desktop.telegram.org
-[telegram_api]: https://core.telegram.org
-[telegram_proto]: https://core.telegram.org/mtproto
-[license]: LICENSE
-[win]: docs/building-win.md
-[mac]: docs/building-mac.md
-[linux]: docs/building-linux.md
-[preview_image]: https://github.com/telegramdesktop/tdesktop/blob/dev/docs/assets/preview.png "Preview of Telegram Desktop"
-[preview_image_url]: https://raw.githubusercontent.com/telegramdesktop/tdesktop/dev/docs/assets/preview.png
+Expressivegram is based on [Telegram Desktop](https://github.com/telegramdesktop/tdesktop). The upstream project is licensed under GPLv3 with an OpenSSL exception. See [LICENSE](LICENSE), [LEGAL](LEGAL), and the applicable third-party license notices for the exact terms.
 
-## Thanks to
+## Credits
 
-<a href="https://depot.dev">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://depot.dev/assets/brand/1693758816/depot-logo-horizontal-on-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://depot.dev/assets/brand/1693758816/depot-logo-horizontal-on-light.svg">
-    <img alt="Depot" src="https://depot.dev/assets/brand/1693758816/depot-logo-horizontal-on-light.svg" width="150">
-  </picture>
-</a>
+- [Telegram Desktop](https://github.com/telegramdesktop/tdesktop) — upstream application and codebase.
+- [Telegram API](https://core.telegram.org/) — platform documentation.
+- [Material Design](https://m3.material.io/) — design inspiration.
 
-CI infrastructure sponsored by [Depot](https://depot.dev) — fast GitHub Actions runners.
-
+Expressivegram is an independent community project; Telegram and Google names are used only to identify the upstream project and design inspiration.
