@@ -30,11 +30,11 @@ tagInfoIcon: icon {{ "chat/large_user_tag-48x48", windowFgActive }};
 tagInfoIconPadding: margins(8px, 8px, 8px, 8px);
 tagInfoPreviewHeight: 80px;
 tagInfoPreviewGap: 8px;
-tagInfoPreviewBubbleRadius: 8px;
+tagInfoPreviewBubbleRadius: 12px;
 tagInfoPreviewLineHeight: 6px;
 tagInfoPreviewLineSpacing: 4px;
 tagInfoPreviewBubblePadding: margins(10px, 8px, 10px, 8px);
-tagInfoPreviewRadius: 8px;
+tagInfoPreviewRadius: 16px;
 tagInfoPreviewBubbleRightMargin: 10px;
 tagInfoPreviewFadeWidth: 24px;
 tagInfoPreviewBadgeTop: 6px;
@@ -324,7 +324,7 @@ historyInfoToast: Toast(defaultToast) {
 historyInfoToastIcon: icon {{ "toast/info", toastFg }};
 
 bubbleRadiusSmall: roundRadiusLarge;
-bubbleRadiusLarge: 16px;
+bubbleRadiusLarge: 20px;
 
 historyPhotoLeft: 14px;
 historyPhotoBubbleMinWidth: 200px;
@@ -376,7 +376,7 @@ HistoryFileLayout {
 }
 
 msgFileThumbRadiusSmall: 4px;
-msgFileThumbRadiusLarge: 12px;
+msgFileThumbRadiusLarge: 16px;
 msgFileLayout: HistoryFileLayout {
 	padding: margins(12px, 8px, 10px, 8px);
 	nameTop: 12px;
@@ -787,7 +787,7 @@ unsupportedNoticeBadgeSize: 36px;
 unsupportedNoticeBadgeSkip: 10px;
 unsupportedNoticeButtonHeight: 30px;
 unsupportedNoticeButtonPadding: margins(12px, 0px, 12px, 0px);
-unsupportedNoticeRadius: 10px;
+unsupportedNoticeRadius: 16px;
 unsupportedNoticeMaxWidth: 430px;
 unsupportedGapSkip: 10px;
 unsupportedTearAmplitude: 5px;
@@ -1163,7 +1163,7 @@ UniqueGiftMessageBubble {
 chatUniqueMessageBubble: UniqueGiftMessageBubble {
 	textPadding: margins(6px, 6px, 6px, 6px);
 	avatarSize: 20px;
-	radius: 10px;
+	radius: 16px;
 	tailSize: size(4px, 5px);
 }
 chatUniqueMessagePadding: margins(22px, 6px, 22px, 7px);
