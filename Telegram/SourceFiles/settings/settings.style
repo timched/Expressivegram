@@ -273,7 +273,7 @@ settingsTheme: Checkbox(defaultCheckbox) {
 
 settingsThemePreviewSize: size(80px, 92px);
 settingsThemeBubbleSize: size(40px, 14px);
-settingsThemeBubbleRadius: 2px;
+settingsThemeBubbleRadius: 8px;
 settingsThemeBubblePosition: point(6px, 8px);
 settingsThemeBubbleSkip: 6px;
 settingsThemeRadioBottom: 12px;
@@ -286,7 +286,7 @@ settingsThemeNotSupportedIcon: icon {{ "theme_preview", menuIconFg }};
 chatThemeTitlePadding: margins(22px, 13px, 22px, 9px);
 chatThemePreviewSize: size(80px, 108px);
 chatThemeBubbleSize: size(48px, 22px);
-chatThemeBubbleRadius: 10px;
+chatThemeBubbleRadius: 16px;
 chatThemeBubblePosition: point(6px, 12px);
 chatThemeBubbleSkip: 6px;
 chatThemeEntrySkip: 10px;
@@ -427,7 +427,7 @@ settingsUsernameLeft: settingsNameLeft;
 settingsUsernameTop: 58px;
 settingsPeerToPeerSkip: 9px;
 
-settingsIconRadius: 6px;
+settingsIconRadius: 12px;
 
 settingsReactionRightIcon: 20px;
 settingsReactionsIslandPadding: margins(12px, 12px, 12px, 4px);
