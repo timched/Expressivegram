@@ -1,0 +1,68 @@
+name: macOS build
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Expressivegram (macOS)
+    runs-on: macos-latest
+    timeout-minutes: 360
+    steps:
+      - name: Check out source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Install build dependencies
+        run: |
+          brew update
+          brew install automake libtool meson nasm ninja pkg-config
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Prepare third-party libraries
+        run: Telegram/build/prepare/mac.sh skip-release silent
+
+      - name: Configure Expressivegram
+        working-directory: Telegram
+        run: |
+          ./configure.sh \
+            -D CMAKE_CONFIGURATION_TYPES=Debug \
+            -D CMAKE_COMPILE_WARNING_AS_ERROR=ON \
+            -D CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
+            -D TDESKTOP_API_TEST=ON \
+            -D DESKTOP_APP_DISABLE_AUTOUPDATE=OFF \
+            -D DESKTOP_APP_DISABLE_CRASH_REPORTS=OFF
+
+      - name: Build Expressivegram
+        run: cmake --build out --config Debug --parallel
+
+      - name: Collect macOS application
+        run: |
+          mkdir -p artifact
+          ditto out/Debug/Telegram.app artifact/Telegram.app
+          if [ -e out/Debug/Updater ]; then
+            cp -R out/Debug/Updater artifact/
+          fi
+          cd artifact
+          zip -r ../expressivegram-macos.zip .
+
+      - name: Upload macOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: expressivegram-macos
+          path: expressivegram-macos.zip
+          if-no-files-found: error
+          retention-days: 7
