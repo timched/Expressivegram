@@ -478,7 +478,7 @@ dialogsSearchInDown: icon {{ "intro_country_dropdown", windowBoldFg }};
 dialogsSearchInDownSkip: 4px;
 dialogsSearchInMenu: PopupMenu(defaultPopupMenu) {
 	scrollPadding: margins(0px, 0px, 0px, 0px);
-	radius: 8px;
+	radius: 16px;
 	menu: menuWithIcons;
 }
 dialogsSearchInCheck: icon {{ "player/player_check", mediaPlayerActiveFg }};
@@ -492,7 +492,7 @@ dialogsScamRadius: 2px;
 
 dialogsMiniPreviewTop: 1px;
 dialogsMiniPreview: 16px;
-dialogsMiniPreviewRadius: 2px;
+dialogsMiniPreviewRadius: 8px;
 dialogsMiniPreviewSkip: 2px;
 dialogsMiniPreviewRight: 3px;
 dialogsMiniPlay: icon{{ "dialogs/dialogs_mini_play", videoPlayIconFg }};
@@ -932,7 +932,7 @@ dialogsUnconfirmedAuthButton: RoundButton(defaultBoxButton) {
 	width: -16px;
 	height: 26px;
 	textTop: 5px;
-	radius: 10px;
+	radius: 16px;
 	style: TextStyle(semiboldTextStyle) {
 		font: font(11px semibold);
 	}
