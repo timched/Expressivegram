@@ -1,0 +1,80 @@
+name: Windows build
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Expressivegram (Windows x64)
+    runs-on: windows-latest
+    timeout-minutes: 360
+    steps:
+      - name: Check out source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          sdk: '10.0.26100.0'
+          toolset: '14.44'
+
+      - name: Configure NuGet
+        shell: cmd
+        run: |
+          nuget sources Disable -Name "Microsoft Visual Studio Offline Packages"
+          nuget sources Add -Source https://api.nuget.org/v3/index.json
+
+      - name: Prepare third-party libraries
+        shell: cmd
+        run: Telegram\build\prepare\win.bat skip-release silent
+
+      - name: Configure Expressivegram
+        shell: cmd
+        working-directory: Telegram
+        run: >-
+          configure.bat x64
+          -D TDESKTOP_API_TEST=ON
+          -D CMAKE_CONFIGURATION_TYPES=Debug
+          -D CMAKE_COMPILE_WARNING_AS_ERROR=ON
+          -D CMAKE_MSVC_DEBUG_INFORMATION_FORMAT=
+
+      - name: Build Expressivegram
+        shell: cmd
+        run: cmake --build out --config Debug --parallel
+
+      - name: Collect Windows binaries
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifact | Out-Null
+          Copy-Item out/Debug/Telegram.exe artifact/ -ErrorAction Stop
+          if (Test-Path out/Debug/Updater.exe) {
+            Copy-Item out/Debug/Updater.exe artifact/
+          }
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: expressivegram-windows-x64
+          path: artifact/
+          if-no-files-found: error
+          retention-days: 7
