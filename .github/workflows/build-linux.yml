@@ -1,0 +1,61 @@
+name: Linux build
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linux-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Expressivegram (Linux)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Check out source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: python -m pip install --upgrade poetry
+
+      - name: Prepare upstream Linux build container
+        run: Telegram/build/prepare/linux.sh
+
+      - name: Build Expressivegram
+        env:
+          TDESKTOP_API_ID: ${{ secrets.TDESKTOP_API_ID || '17349' }}
+          TDESKTOP_API_HASH: ${{ secrets.TDESKTOP_API_HASH || '344583e45741c457fe1862106095a5eb' }}
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --volume "$PWD:/usr/src/tdesktop" \
+            --workdir /usr/src/tdesktop \
+            tdesktop:centos_env \
+            /usr/src/tdesktop/Telegram/build/docker/centos_env/build.sh \
+            -D "TDESKTOP_API_ID=$TDESKTOP_API_ID" \
+            -D "TDESKTOP_API_HASH=$TDESKTOP_API_HASH"
+
+      - name: Upload Linux executable
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: expressivegram-linux
+          path: out/Telegram
+          if-no-files-found: error
+          retention-days: 7
