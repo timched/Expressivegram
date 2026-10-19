@@ -9,7 +9,9 @@ The goal is to bring expressive shapes, a coherent color system, clearer visual 
 > [!NOTE]
 > Expressivegram is an unofficial third-party project. It is not affiliated with, endorsed by, or sponsored by Telegram or Google.
 
-[![Linux CI](https://github.com/timched/Expressivegram/actions/workflows/build-linux.yml/badge.svg?branch=dev)](https://github.com/timched/Expressivegram/actions/workflows/build-linux.yml)
+[![Linux CI](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-linux.yml/badge.svg?branch=dev)](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-linux.yml)
+[![Windows CI](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-windows.yml/badge.svg?branch=dev)](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-windows.yml)
+[![macOS CI](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-macos.yml/badge.svg?branch=dev)](https://github.com/timched/Expressivegram-Desktop/actions/workflows/build-macos.yml)
 [![Upstream Telegram Desktop](https://img.shields.io/badge/based%20on-Telegram%20Desktop-26A5E4)](https://github.com/telegramdesktop/tdesktop)
 [![License](https://img.shields.io/badge/license-GPL--3.0%20with%20OpenSSL%20exception-blue)](LICENSE)
 
@@ -29,24 +31,30 @@ The goal is to bring expressive shapes, a coherent color system, clearer visual 
 
 The project uses the upstream Telegram Desktop build system and its Git submodules. Start with the [Linux build instructions](docs/building-linux.md), [Windows build instructions](docs/building-win.md), or [macOS build instructions](docs/building-mac.md).
 
-For a Linux build, the upstream build environment uses Docker and Poetry:
+Clone the repository and its submodules:
 
 ```bash
-git clone --recursive https://github.com/timched/Expressivegram.git
-cd Expressivegram
-```bash
-# Prepare the upstream Linux build environment
-Telegram/build/prepare/linux.sh
-` ` `
+git clone --recursive https://github.com/timched/Expressivegram-Desktop.git
+cd Expressivegram-Desktop
 ```
 
-Then build from the repository root using the Docker image created by the preparation script. Supply your own Telegram API credentials as described in [the upstream build guide](docs/building-linux.md).
+For a Linux build, prepare the upstream build environment:
+
+```bash
+Telegram/build/prepare/linux.sh
+```
+
+Then follow the platform-specific build guide. The build may require your own Telegram API credentials; see the relevant documentation and the [upstream build guide](https://github.com/telegramdesktop/tdesktop/blob/dev/docs/building-linux.md).
 
 ## GitHub Actions
 
-The Linux build workflow runs for pushes to `dev`, pull requests targeting `dev`, and manual dispatches. It checks out submodules, prepares the upstream build container, compiles the application, and uploads the resulting executable as a workflow artifact.
+The workflows run on pushes to `dev`, pull requests targeting `dev`, and manual dispatches:
 
-The first full build can take a while because Telegram Desktop has many dependencies.
+- **Linux** — prepares the upstream build container, compiles the application, and uploads the executable as a workflow artifact.
+- **Windows x64** — prepares third-party libraries, configures CMake, compiles the application, and uploads the executable and optional updater.
+- **macOS** — prepares dependencies, builds the application bundle, and uploads a ZIP artifact.
+
+Builds can take a while because Telegram Desktop has many dependencies. Workflow artifacts are temporary CI outputs, not official signed releases.
 
 ## License
 
