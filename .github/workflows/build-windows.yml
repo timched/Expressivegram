@@ -39,10 +39,28 @@ jobs:
           toolset: '14.44'
 
       - name: Configure NuGet
-        shell: cmd
+        shell: pwsh
         run: |
           nuget sources Disable -Name "Microsoft Visual Studio Offline Packages"
-          nuget sources Add -Source https://api.nuget.org/v3/index.json
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to disable the Visual Studio offline NuGet source."
+          }
+
+          $sourceName = "nuget.org"
+          $sourceUrl = "https://api.nuget.org/v3/index.json"
+          $sources = nuget sources List | Out-String
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to list NuGet sources."
+          }
+
+          if ($sources -notmatch [regex]::Escape($sourceUrl)) {
+            nuget sources Add -Name $sourceName -Source $sourceUrl
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to add the nuget.org source."
+            }
+          } else {
+            Write-Host "NuGet.org source already exists; skipping duplicate add."
+          }
 
       - name: Prepare third-party libraries
         shell: cmd
