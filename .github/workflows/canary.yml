@@ -496,7 +496,24 @@ jobs:
       - name: NuGet sources.
         run: |
           nuget sources Disable -Name "Microsoft Visual Studio Offline Packages"
-          nuget sources Add -Source https://api.nuget.org/v3/index.json & exit 0
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to disable the Visual Studio offline NuGet source."
+          }
+
+          $sourceUrl = "https://api.nuget.org/v3/index.json"
+          $sources = nuget sources List | Out-String
+          if ($LASTEXITCODE -ne 0) {
+            throw "Failed to list NuGet sources."
+          }
+
+          if ($sources -notmatch [regex]::Escape($sourceUrl)) {
+            nuget sources Add -Name "nuget.org" -Source $sourceUrl
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to add the nuget.org source."
+            }
+          } else {
+            Write-Host "NuGet.org source already exists; skipping duplicate add."
+          }
 
       # The caches are restored/saved explicitly (not via the combined
       # actions/cache) because the combined action only saves in a post
